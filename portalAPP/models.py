@@ -25,6 +25,9 @@ class Usuario (AbstractUser):
         return self.email
 
 
+class TokenAuth(models.Model):
+    token = models.CharField(max_length = 50, unique = True)
+
 class Projeto(models.Model):
     titulo = models.CharField(max_length = 200, unique = True)
     link_projeto = models.CharField(max_length = 300,blank = True)

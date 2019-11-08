@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Usuario)
 admin.site.register(Projeto)
 admin.site.register(ProjetoParticipantes)
+admin.site.register(TokenAuth)

@@ -29,7 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('login/', obtain_auth_token, name='api_token_auth') #login
+    path('login/', obtain_auth_token, name='api_token_auth'),
+    path('GerarLink/', views.GerarLink.as_view(), name='gerar_link'),
 ]
 
 if settings.DEBUG: # new
