@@ -26,9 +26,10 @@ class Usuario (AbstractUser):
 
 
 class TokenAuth(models.Model):
-    token = models.CharField(max_length = 50, unique = True)
+    token = models.CharField(max_length = 50, primary_key=True)
 
 class Projeto(models.Model):
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     titulo = models.CharField(max_length = 200, unique = True)
     link_projeto = models.CharField(max_length = 300,blank = True)
     categoria = models.CharField(max_length = 200,  default = "")

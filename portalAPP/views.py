@@ -1,4 +1,4 @@
-#from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
@@ -20,6 +20,10 @@ class ProjetoViewSet(viewsets.ModelViewSet):
     serializer_class = ProjetoSerializer
 
 
+class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
+    queryset = ProjetoParticipantes.objects.all()
+    serializer_class = ProjetoParticipantesSerializer
+
 class GerarLink(APIView):
     permission_classes = (IsAdminUser,)
 
@@ -33,3 +37,14 @@ class GerarLink(APIView):
                 pass
         content = {'Token': token_auth.token}
         return Response(content)
+
+class AutenticarLink(APIView):
+    def get(self,request, id):
+        try:
+            token = get_object_or_404(TokenAuth, pk=id)
+            token.delete()
+            content = {'Autenticado': True}
+            return Response(content)
+        except:
+            content = {'Autenticado': False}
+            return Response(content)

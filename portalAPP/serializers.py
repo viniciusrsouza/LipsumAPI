@@ -12,3 +12,8 @@ class ProjetoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Projeto
         fields = '__all__'
+
+class ProjetoParticipantesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjetoParticipantes
+        fields = '__all__'

@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 router = routers.DefaultRouter()
 router.register(r'Usuario', views.UsuarioViewSet)
 router.register(r'Projeto', views.ProjetoViewSet)
+router.register(r'ProjetoParticipantes', views.ProjetoParticipantesViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('login/', obtain_auth_token, name='api_token_auth'),
     path('GerarLink/', views.GerarLink.as_view(), name='gerar_link'),
+    path('AutenticarLink/<str:id>', views.AutenticarLink.as_view(), name='autenticar_link'),
 ]
 
 if settings.DEBUG: # new
