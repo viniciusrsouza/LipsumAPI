@@ -67,7 +67,7 @@ def usuarioDetalhe(request, id):
         
 
 class ProjetoViewSet(viewsets.ModelViewSet):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     queryset = Projeto.objects.all()
     serializer_class = ProjetoSerializer
 
