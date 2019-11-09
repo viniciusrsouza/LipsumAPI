@@ -7,6 +7,24 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 from .generateToken import get_token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+
+class Login(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'nome': user.nome,
+            'Administrador': user.is_superuser
+
+        })
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
@@ -23,6 +41,7 @@ class ProjetoViewSet(viewsets.ModelViewSet):
 class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
     queryset = ProjetoParticipantes.objects.all()
     serializer_class = ProjetoParticipantesSerializer
+
 
 class GerarLink(APIView):
     permission_classes = (IsAdminUser,)

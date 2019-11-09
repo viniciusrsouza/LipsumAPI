@@ -30,7 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('login/', obtain_auth_token, name='api_token_auth'),
+    path('login/', views.Login.as_view(), name='login'),
     path('GerarLink/', views.GerarLink.as_view(), name='gerar_link'),
     path('AutenticarLink/<str:id>', views.AutenticarLink.as_view(), name='autenticar_link'),
 ]
