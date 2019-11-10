@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
@@ -24,14 +25,14 @@ class Login(ObtainAuthToken):
             'user_id': user.pk,
             'nome': user.nome,
             'Administrador': user.is_superuser
-
+            
         })
 
-'''
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-'''
+
 
 class UsuarioView(APIView):
     def get(self, request):
@@ -45,6 +46,7 @@ class UsuarioView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def usuarioDetalhe(request, id):
