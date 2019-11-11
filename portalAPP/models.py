@@ -35,7 +35,7 @@ class Projeto(models.Model):
     categoria = models.CharField(max_length = 200,  default = "")
     descricao = models.TextField(max_length = 2000)
     imagem = models.ImageField(upload_to = 'projImgs')
-    data_publicacao = models.DateTimeField(auto_now_add = True)
+    data_publicacao = models.DateField(auto_now_add = True)
 
     def __str__(self):
         return self.titulo
