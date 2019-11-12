@@ -44,13 +44,3 @@ class Projeto(models.Model):
 class ProjetoParticipantes (models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-class Noticia(models.Model):
-    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    titulo = models.CharField(max_length = 200, unique = True)
-    descricao = models.TextField(max_length = 2000)
-    imagem = models.ImageField(upload_to = 'noticiaImgs')
-    data_publicacao = models.DateField(auto_now_add = True)
-
-    def __str__(self):
-        return self.titulo
