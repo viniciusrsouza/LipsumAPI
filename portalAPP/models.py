@@ -20,6 +20,7 @@ class Usuario (AbstractUser):
     departamento = models.CharField(max_length = 200)
     formacao = models.CharField(max_length = 200)
     link_lates = models.CharField(max_length = 300)
+    photo = models.ImageField(upload_to = 'profileImgs', blank=True)
 
     def __str__(self):
         return self.email
