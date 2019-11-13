@@ -37,13 +37,16 @@ class Projeto(models.Model):
     descricao = models.TextField(max_length = 2000)
     imagem = models.ImageField(upload_to = 'projImgs')
     data_publicacao = models.DateField(auto_now_add = True)
+    participantes = models.ManyToManyField(Usuario, related_name='participantes')
 
     def __str__(self):
         return self.titulo
 
+'''
 class ProjetoParticipantes (models.Model):
     projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+'''
 
 class Noticia(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)

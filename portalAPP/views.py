@@ -73,11 +73,11 @@ class ProjetoViewSet(viewsets.ModelViewSet):
     queryset = Projeto.objects.all()
     serializer_class = ProjetoSerializer
 
-
+'''
 class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
     queryset = ProjetoParticipantes.objects.all()
     serializer_class = ProjetoParticipantesSerializer
-
+'''
 
 class GerarLink(APIView):
     permission_classes = (IsAdminUser,)
