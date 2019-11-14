@@ -25,9 +25,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
 
 class UsuarioSerializer2(serializers.ModelSerializer):
-
-    all_fields = Usuario._meta.get_fields()
-    print(all_fields)
+    #all_fields = Usuario._meta.get_fields()
+    #print(all_fields)
+    #user = Usuario()
+    #print(dir(user))
+    projetos = serializers.SerializerMethodField()
 
     def get_projetos(self, instance):
         proj_list = []
@@ -38,12 +40,5 @@ class UsuarioSerializer2(serializers.ModelSerializer):
     
     class Meta:
         model = Usuario
-        fields =  fields = ['id', 'email', 'password', 'nome', 'afiliacao', 'departamento', 'formacao', 'link_lates',  'projetos']
-        #extra_kwargs = {'password': {'write_only': True}}   
-
-'''
-class ProjetoParticipantesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjetoParticipantes
-        fields = '__all__'
-'''
+        fields =  fields = ['id', 'email', 'password', 'nome', 'afiliacao', 'departamento', 'formacao', 'link_lates', 'projetos']
+        #extra_kwargs = {'password': {'write_only': True}}

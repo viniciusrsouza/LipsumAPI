@@ -30,23 +30,18 @@ class TokenAuth(models.Model):
     token = models.CharField(max_length = 50, primary_key=True)
 
 class Projeto(models.Model):
-    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='autor')
     titulo = models.CharField(max_length = 200, unique = True)
     link_projeto = models.CharField(max_length = 300,blank = True)
     categoria = models.CharField(max_length = 200,  default = "")
     descricao = models.TextField(max_length = 2000)
     imagem = models.ImageField(upload_to = 'projImgs')
     data_publicacao = models.DateField(auto_now_add = True)
-    participantes = models.ManyToManyField(Usuario, related_name='participantes')
+    participantes = models.ManyToManyField(Usuario)
 
     def __str__(self):
         return self.titulo
 
-'''
-class ProjetoParticipantes (models.Model):
-    projeto = models.ForeignKey(Projeto, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-'''
 
 class Noticia(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
