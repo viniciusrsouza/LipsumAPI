@@ -11,6 +11,7 @@ from .serializers import *
 from .generateToken import get_token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from .email import send_link
 
 class Login(ObtainAuthToken):
 
@@ -80,17 +81,12 @@ class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
 '''
 
 class GerarLink(APIView):
-    permission_classes = (IsAdminUser,)
+    #permission_classes = (IsAdminUser,)
 
-    def get(self, request):
-        token_auth = TokenAuth(token=get_token())
-        while True:
-            try:
-                token_auth.save()
-                break
-            except:
-                pass
-        content = {'Token': token_auth.token}
+    def get(self,request,email):
+        token = get_token()
+        send_link(email, token)
+        content = {'Token': token}
         return Response(content)
 
 class AutenticarLink(APIView):

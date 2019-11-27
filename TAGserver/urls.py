@@ -32,7 +32,7 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('Usuario/', views.UsuarioView.as_view(), name='usuario'),
     path('Usuario/<int:id>', views.usuarioDetalhe, name='usuario'),
-    path('GerarLink/', views.GerarLink.as_view(), name='gerar_link'),
+    path('GerarLink/<str:email>', views.GerarLink.as_view(), name='gerar_link'),
     path('AutenticarLink/<str:id>', views.AutenticarLink.as_view(), name='autenticar_link'),
 ]
 
