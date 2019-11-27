@@ -73,7 +73,26 @@ class ProjetoViewSet(viewsets.ModelViewSet):
     #permission_classes = (IsAuthenticated,)
     queryset = Projeto.objects.all()
     serializer_class = ProjetoSerializer
+'''
+@api_view(['GET', 'PUT', 'DELETE'])
+def projetoDetalhe(request, id):
 
+    try:
+        projeto = Usuario.objects.get(pk=id)
+    except Usuario.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET':
+        serializer = UsuarioSerializer2(usuario)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = UsuarioSerializer(usuario, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+'''
 '''
 class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
     queryset = ProjetoParticipantes.objects.all()

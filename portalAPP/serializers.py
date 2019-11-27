@@ -23,6 +23,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data.get('password'))
         return super(UsuarioSerializer, self).update(instance, validated_data)
     
+    extra_kwargs = {'password': {'write_only': True}, 'email': {'write_only': True}}
 
 class UsuarioSerializer2(serializers.ModelSerializer):
     #all_fields = Usuario._meta.get_fields()
@@ -41,4 +42,4 @@ class UsuarioSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields =  fields = ['id', 'email', 'password', 'nome', 'afiliacao', 'departamento', 'formacao', 'link_lates', 'projetos']
-        #extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}, 'email': {'write_only': True}}
