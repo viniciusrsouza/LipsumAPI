@@ -73,6 +73,16 @@ class ProjetoViewSet(viewsets.ModelViewSet):
     #permission_classes = (IsAuthenticated,)
     queryset = Projeto.objects.all()
     serializer_class = ProjetoSerializer
+
+class NoticiaViewSet(viewsets.ModelViewSet):
+    #permission_classes = (IsAuthenticated,)
+    queryset = Projeto.objects.all()
+    serializer_class = ProjetoSerializer
+
+class EventoViewSet(viewsets.ModelViewSet):
+    #permission_classes = (IsAuthenticated,)
+    queryset = Projeto.objects.all()
+    serializer_class = ProjetoSerializer
 '''
 @api_view(['GET', 'PUT', 'DELETE'])
 def projetoDetalhe(request, id):
@@ -112,7 +122,6 @@ class AutenticarLink(APIView):
     def get(self,request, id):
         try:
             token = get_object_or_404(TokenAuth, pk=id)
-            token.delete()
             content = {'Autenticado': True}
             return Response(content)
         except:

@@ -8,6 +8,15 @@ class ProjetoSerializer(serializers.ModelSerializer):
         model = Projeto
         fields = '__all__'
 
+class NoticiaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Noticia
+        fields = '__all__'
+    
+class EventoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Evento
+        fields = '__all__'
 
 class UsuarioSerializer(serializers.ModelSerializer):
 
