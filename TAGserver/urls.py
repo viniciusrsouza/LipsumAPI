@@ -34,6 +34,7 @@ urlpatterns = [
     path('login/', views.Login.as_view(), name='login'),
     path('Usuario/', views.UsuarioView.as_view(), name='usuario'),
     path('Usuario/<int:pk>', views.UsuarioDetalhe.as_view(), name='usuario'),
+    path('Usuario/<str:token>', views.UsuarioRegister.as_view(), name='usuario')
     path('Projeto/', views.ProjetoView.as_view(), name='projeto'),
     path('Projeto/<int:pk>', views.ProjetoDetalhe, name='projeto'),
     path('Evento/', views.EventoView.as_view(), name='evento'),

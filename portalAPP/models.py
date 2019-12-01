@@ -34,7 +34,7 @@ class TokenAuth(models.Model):
 class Projeto(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='autor')
     titulo = models.CharField(max_length = 200, unique = True)
-    link_projeto = models.CharField(max_length = 300,blank = True)
+    link_projeto = models.CharField(max_length = 300, blank = True)
     categoria = models.CharField(max_length = 200,  default = "")
     descricao = models.TextField(max_length = 2000)
     imagem = models.ImageField(upload_to = 'projImgs')
@@ -48,6 +48,7 @@ class Projeto(models.Model):
 class Noticia(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     titulo = models.CharField(max_length = 200, unique = True)
+    categoria = models.CharField(max_length=200, blank=True)
     descricao = models.TextField(max_length = 2000)
     imagem = models.ImageField(upload_to = 'noticiaImgs')
     data_publicacao = models.DateField(auto_now_add = True)
@@ -59,8 +60,8 @@ class Evento(models.Model):
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='autor_evento')
     titulo = models.CharField(max_length = 200, unique = True)
     descricao = models.TextField(max_length = 2000)
-    imagem = models.ImageField(upload_to = 'noticiaImgs')
-    participantes = models.ManyToManyField(Usuario)
+    #imagem = models.ImageField(upload_to = 'noticiaImgs')
+    #participantes = models.ManyToManyField(Usuario)
     data_publicacao = models.DateField(auto_now_add = True)
 
     def __str__(self):
