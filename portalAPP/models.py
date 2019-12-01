@@ -63,12 +63,17 @@ class Evento(models.Model):
     #imagem = models.ImageField(upload_to = 'noticiaImgs')
     #participantes = models.ManyToManyField(Usuario)
     data_publicacao = models.DateField(auto_now_add = True)
+    data_inicio = models.DateTimeField()
+    data_fim = models.DateTimeField(default = None)
 
     def __str__(self):
         return self.titulo
-    
-    def validate_date(data):
-        if data < timezone.now():
+    '''
+    def validate_date(data_inicio):
+        if data_inicio < timezone.now():
             raise ValidationError("Date cannot be in the past")
-    
-    data = models.DateTimeField(validators=[validate_date])
+    '''
+    def clean(self):
+        super().clean()
+        if not (timezone.now() <= self.data_inicio <= self.data_fim):
+            raise ValidationError('Invalid start and end datetime')
