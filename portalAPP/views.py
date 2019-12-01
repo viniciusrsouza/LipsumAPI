@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -12,6 +14,7 @@ from .generateToken import get_token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .email import send_link
+from .customPermissions import IsOwnerOrAdminOrReadOnly
 
 class Login(ObtainAuthToken):
 
@@ -31,14 +34,15 @@ class Login(ObtainAuthToken):
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
+    #permission_classes = (IsAuthenticated,)
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-
 class UsuarioView(APIView):
+    #Lista todos os usuários, ou cria um novo
     def get(self, request):
         usuarios = Usuario.objects.all()
-        serializer = UsuarioSerializer2(usuarios, many=True)
+        serializer = UsuarioSerializer(usuarios, many=True)
         return Response(serializer.data)
 
     def post(self, request):
@@ -47,8 +51,34 @@ class UsuarioView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UsuarioDetalhe(APIView):
+    def get_object(self, pk):
+        try:
+            return Usuario.objects.get(pk=pk)
+        except Usuario.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        usuario = self.get_object(pk)
+        serializer = UsuarioSerializer(usuario)
+        return Response(serializer.data)
 
+    def put(self, request, pk, format=None):
+        usuario = self.get_object(pk)
+        serializer = UsuarioSerializer(usuario, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, format=None):
+        usuario = self.get_object(pk)
+        usuario.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+'''
+#Método de views baseadas em funções
 @api_view(['GET', 'PUT', 'DELETE'])
 def usuarioDetalhe(request, id):
 
@@ -67,47 +97,146 @@ def usuarioDetalhe(request, id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+'''        
 
-class ProjetoViewSet(viewsets.ModelViewSet):
-    #permission_classes = (IsAuthenticated,)
-    queryset = Projeto.objects.all()
-    serializer_class = ProjetoSerializer
 
-class NoticiaViewSet(viewsets.ModelViewSet):
-    #permission_classes = (IsAuthenticated,)
-    queryset = Projeto.objects.all()
-    serializer_class = ProjetoSerializer
-
-class EventoViewSet(viewsets.ModelViewSet):
-    #permission_classes = (IsAuthenticated,)
-    queryset = Projeto.objects.all()
-    serializer_class = ProjetoSerializer
-'''
-@api_view(['GET', 'PUT', 'DELETE'])
-def projetoDetalhe(request, id):
-
-    try:
-        projeto = Usuario.objects.get(pk=id)
-    except Usuario.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
-        serializer = UsuarioSerializer2(usuario)
+class ProjetoView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    #Lista todos os projetos, ou cria um novo
+    def get(self, request):
+        projetos = Projeto.objects.all()
+        serializer = ProjetoSerializer(projetos, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ProjetoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProjetoDetalhe(APIView):
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            obj = Projeto.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Projeto.DoesNotExist:
+            raise Http404
     
-    elif request.method == 'PUT':
-        serializer = UsuarioSerializer(usuario, data=request.data)
+    def get(self, request, pk, format=None):
+        projeto = self.get_object(pk)
+        serializer = ProjetoSerializer(projeto)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        projeto = self.get_object(pk)
+        serializer = ProjetoSerializer(projeto, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-'''
-'''
-class ProjetoParticipantesViewSet(viewsets.ModelViewSet):
-    queryset = ProjetoParticipantes.objects.all()
-    serializer_class = ProjetoParticipantesSerializer
-'''
+    
+    def delete(self, request, pk, format=None):
+        projeto = self.get_object(pk)
+        projeto.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class NoticiaView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    #Lista todas as noticias, ou cria uma nova
+    def get(self, request):
+        noticias = Noticia.objects.all()
+        serializer = NoticiaSerializer(noticias, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = NoticiaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NoticiaDetalhe(APIView):
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            obj = Noticia.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Noticia.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        noticia = self.get_object(pk)
+        serializer = NoticiaSerializer(noticia)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        noticia = self.get_object(pk)
+        serializer = NoticiaSerializer(noticia, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk, format=None):
+        noticia = self.get_object(pk)
+        noticia.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventoView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    #Lista todos os projetos, ou cria um novo
+    def get(self, request):
+        eventos = Evento.objects.all()
+        serializer = EventoSerializer(eventos, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = EventoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EventoDetalhe(APIView):
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            obj = Evento.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Evento.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, pk, format=None):
+        evento = self.get_object(pk)
+        serializer = EventoSerializer(evento)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        evento = self.get_object(pk)
+        serializer = EventoSerializer(evento, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        evento = self.get_object(pk)
+        evento.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class GerarLink(APIView):
     #permission_classes = (IsAdminUser,)

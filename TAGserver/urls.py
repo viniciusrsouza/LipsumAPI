@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 #router.register(r'Usuario', views.UsuarioViewSet)
-router.register(r'Projeto', views.ProjetoViewSet)
-router.register(r'Noticia', views.NoticiaViewSet)
-router.register(r'Evento', views.EventoViewSet)
+#router.register(r'Projeto', views.ProjetoViewSet)
+#router.register(r'Noticia', views.NoticiaViewSet)
+#router.register(r'Evento', views.EventoViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,7 +33,13 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('login/', views.Login.as_view(), name='login'),
     path('Usuario/', views.UsuarioView.as_view(), name='usuario'),
-    path('Usuario/<int:id>', views.usuarioDetalhe, name='usuario'),
+    path('Usuario/<int:pk>', views.UsuarioDetalhe.as_view(), name='usuario'),
+    path('Projeto/', views.ProjetoView.as_view(), name='projeto'),
+    path('Projeto/<int:pk>', views.ProjetoDetalhe, name='projeto'),
+    path('Evento/', views.EventoView.as_view(), name='evento'),
+    path('Evento/<int:pk>', views.EventoDetalhe.as_view(), name='evento'),
+    path('Noticia/', views.NoticiaView.as_view(), name='noticia'),
+    path('Noticia/<int:pk>', views.NoticiaDetalhe.as_view(), name='noticia'),
     path('GerarLink/<str:email>', views.GerarLink.as_view(), name='gerar_link'),
     path('AutenticarLink/<str:id>', views.AutenticarLink.as_view(), name='autenticar_link'),
 ]
