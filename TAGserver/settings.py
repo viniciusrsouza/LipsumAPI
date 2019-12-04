@@ -25,7 +25,7 @@ SECRET_KEY = 'cdi1**=rl8rasp8_k8__x1yt6^%9ksq4y-ar_t_y+v-i&x&-3-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['lipsumservertag.herokuapp.com']
 
 
 # Application definition
