@@ -41,6 +41,13 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
 class UsuarioView(APIView):
     #Lista todos os usuários, ou cria um novo
+    def post(self, request):
+        serializer = UsuarioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def get(self, request):
         usuarios = Usuario.objects.all()
         serializer = UsuarioSerializer(usuarios, many=True)

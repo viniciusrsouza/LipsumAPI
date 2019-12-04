@@ -42,19 +42,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['id', 'email', 'password', 'nome', 'afiliacao', 'departamento', 'formacao', 'link_lates','photo','projetos','is_superuser']
-        extra_kwargs = {'password': {'write_only': True}, 'email': {'write_only': True}, 'is_superuser':{'read_only': True},} 
+        extra_kwargs = {'password': {'write_only': True}, 'is_superuser':{'read_only': True},} 
     
     
 '''
-class UserUpdateAdminSerializer(serializers.ModelSerializer):
     #all_fields = Usuario._meta.get_fields()
     #print(all_fields)
     #user = Usuario()
     #print(dir(user))
-    
-    
-    class Meta:
-        model = Usuario
-        fields =  fields = ['id', 'email', 'password', 'nome', 'afiliacao', 'departamento', 'formacao', 'link_lates', 'projetos','photo','is_superuser']
-        extra_kwargs = {'password': {'write_only': True}, 'email': {'write_only': True}}
 '''
